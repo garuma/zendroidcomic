@@ -57,11 +57,6 @@ public class ImageAdaptater extends BaseAdapter {
 	}
 	
 	@Override
-	public boolean isEmpty() {
-		return dialog != null;
-	}
-
-	@Override
 	public Object getItem(int position) {
 		return position;
 	}
@@ -75,7 +70,9 @@ public class ImageAdaptater extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ImageView view = new ImageView (context);
 		
-		if (cache.canReturnBitmap(position)) {
+		if (count == 0) {
+			view.setImageBitmap(cache.getDefaultBitmap());
+		} else if (cache.canReturnBitmap(position)) {
 			view.setImageBitmap(cache.unsafeGetBitmap (position));
 		} else {
 			// There is already pending request to show something, cancel
