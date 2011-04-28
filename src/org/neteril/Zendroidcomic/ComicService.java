@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 import org.neteril.Zendroidcomic.ComicSource.DilbertComicSource;
 import org.neteril.Zendroidcomic.ComicSource.GarfieldComicSource;
 import org.neteril.Zendroidcomic.ComicSource.LolcatComicSource;
+import org.neteril.Zendroidcomic.ComicSource.PhdComicSource;
 import org.neteril.Zendroidcomic.ComicSource.XkcdComicSource;
 
 public class ComicService {
@@ -34,7 +35,8 @@ public class ComicService {
 			new XkcdComicSource(),
 			new GarfieldComicSource(),
 			new LolcatComicSource(),
-			new DilbertComicSource()
+			new DilbertComicSource(),
+			new PhdComicSource()
 		};
 	private List<IComicSource> shuffled = new ArrayList<IComicSource> ();
 	private Random rnd = new Random();
