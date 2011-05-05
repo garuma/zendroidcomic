@@ -11,6 +11,7 @@ import org.neteril.Zendroidcomic.ComicSource.DilbertComicSource;
 import org.neteril.Zendroidcomic.ComicSource.GarfieldComicSource;
 import org.neteril.Zendroidcomic.ComicSource.LolcatComicSource;
 import org.neteril.Zendroidcomic.ComicSource.PhdComicSource;
+import org.neteril.Zendroidcomic.ComicSource.TrollcatComicSource;
 import org.neteril.Zendroidcomic.ComicSource.XkcdComicSource;
 
 public class ComicService {
@@ -19,7 +20,8 @@ public class ComicService {
 		Garfield,
 		Lolcat,
 		Dilbert,
-		PhdComic;
+		PhdComic,
+		Trollcats;
 		
 		public int toIntIndex () {
 			switch (this) {
@@ -33,6 +35,8 @@ public class ComicService {
 				return 3;
 			case PhdComic:
 				return 4;
+			case Trollcats:
+				return 5;
 			default:
 				return -1;	
 			}
@@ -61,7 +65,8 @@ public class ComicService {
 			new GarfieldComicSource(),
 			new LolcatComicSource(),
 			new DilbertComicSource(),
-			new PhdComicSource()
+			new PhdComicSource(),
+			new TrollcatComicSource()
 		};
 	private boolean[] disabledComics = new boolean[sources.length];
 	private List<IComicSource> shuffled = new ArrayList<IComicSource> ();

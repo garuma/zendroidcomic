@@ -2,14 +2,12 @@ package org.neteril.Zendroidcomic;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
