@@ -6,11 +6,13 @@ import org.neteril.Zendroidcomic.ComicInformations;
 import org.neteril.Zendroidcomic.IComicSource;
 
 public class LolcatComicSource implements IComicSource {
+	private final static Pattern pattern = Pattern.compile("http://icanhascheezburger.files.wordpress.com/(\\d+)/(\\d+)/(\\w|-|_)+\\.\\w+");
+	
 	@Override
 	public ComicInformations getNextComic() {
 		return ComicSourceHelper.randomWithRegexFetcher(this,
 				"http://icanhascheezburger.com/?random",
-				Pattern.compile("http://icanhascheezburger.files.wordpress.com/(\\d+)/(\\d+)/(\\w|-|_)+\\.\\w+"));
+				pattern);
 	}
 
 	@Override

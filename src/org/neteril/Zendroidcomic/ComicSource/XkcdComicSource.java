@@ -6,12 +6,13 @@ import org.neteril.Zendroidcomic.ComicInformations;
 import org.neteril.Zendroidcomic.IComicSource;
 
 public class XkcdComicSource implements IComicSource {
+	private final static Pattern pattern = Pattern.compile("http://imgs.xkcd.com/comics/\\w+\\.\\w+");
 
 	@Override
 	public ComicInformations getNextComic() {
 		return ComicSourceHelper.randomWithRegexFetcher(this,
 				"http://dynamic.xkcd.com/comic/random/",
-				Pattern.compile("http://imgs.xkcd.com/comics/\\w+\\.\\w+"));
+				pattern);
 	}
 
 	@Override

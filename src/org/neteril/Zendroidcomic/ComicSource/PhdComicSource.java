@@ -9,8 +9,9 @@ import org.neteril.Zendroidcomic.IComicSource;
 public class PhdComicSource implements IComicSource {
 	// Dirty hack
 	private final int maxId = 1428;
-	private Random rand = new Random ();
-	private String baseUrl = "http://www.phdcomics.com/comics/archive.php?comicid=";
+	private final Random rand = new Random ();
+	private static final String baseUrl = "http://www.phdcomics.com/comics/archive.php?comicid=";
+	private static final Pattern pattern = Pattern.compile ("http://www.phdcomics.com/comics/archive/phd\\d{4,}s.gif");
 
 	@Override
 	public ComicInformations getNextComic() {
@@ -20,7 +21,7 @@ public class PhdComicSource implements IComicSource {
 		}
 		return ComicSourceHelper.randomWithRegexFetcher(this,
 				baseUrl + id,
-				Pattern.compile ("http://www.phdcomics.com/comics/archive/phd\\d{4,}s.gif"));
+				pattern);
 	}
 
 	@Override

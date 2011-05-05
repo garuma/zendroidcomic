@@ -1,12 +1,15 @@
 package org.neteril.Zendroidcomic;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
@@ -15,13 +18,13 @@ public class ImageAdaptater extends BaseAdapter {
 	public static final int MESSAGE_PRELOAD_COMPLETE = 1;
 	public static final int MESSAGE_NEXT_COMPLETE = 2;
 
-	private Context context;
-	private ImageCache cache;
+	private final Activity context;
+	private final ImageCache cache;
 	private int count = 0;
 	private ImageView currentImageView;
 	private ProgressDialog dialog;
 
-	public ImageAdaptater (Context context, ImageCache cache) {
+	public ImageAdaptater (Activity context, ImageCache cache) {
 		this.context = context;
 		this.cache = cache;
         dialog = ProgressDialog.show(context, "", "Loading. Please wait...", true);
@@ -46,6 +49,7 @@ public class ImageAdaptater extends BaseAdapter {
 					currentImageView = null;
 					count = cache.getCacheCount ();
 					dataChanged(false);
+					context.setProgressBarIndeterminateVisibility(false);
 					break;
 				}
 			}
@@ -68,12 +72,14 @@ public class ImageAdaptater extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ImageView view = new ImageView (context);
+		ImageView view = convertView != null ? (ImageView) convertView : new ImageView (context);
 		
 		if (count == 0) {
 			view.setImageBitmap(cache.getDefaultBitmap());
 		} else if (cache.canReturnBitmap(position)) {
-			view.setImageBitmap(cache.unsafeGetBitmap (position));
+			Bitmap bmp = cache.unsafeGetBitmap (position);
+			if (bmp != null)
+				view.setImageBitmap(bmp);
 		} else {
 			// There is already pending request to show something, cancel
 			if (currentImageView != null)
@@ -82,6 +88,7 @@ public class ImageAdaptater extends BaseAdapter {
 			view.setImageBitmap(cache.getDefaultBitmap());
 			currentImageView = view;
 			cache.getImage(position, handler);
+			context.setProgressBarIndeterminateVisibility(true);
 		}
 		
         view.setLayoutParams(new Gallery.LayoutParams(Gallery.LayoutParams.MATCH_PARENT, Gallery.LayoutParams.MATCH_PARENT));
@@ -104,6 +111,4 @@ public class ImageAdaptater extends BaseAdapter {
 	private void dataChanged (boolean firstTime) {
 		this.notifyDataSetChanged();
 	}
-	
-	
 }

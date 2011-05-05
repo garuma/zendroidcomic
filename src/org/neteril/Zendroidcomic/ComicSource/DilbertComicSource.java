@@ -1,18 +1,12 @@
 package org.neteril.Zendroidcomic.ComicSource;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EncodingUtils;
-import org.apache.http.util.EntityUtils;
 import org.neteril.Zendroidcomic.ComicInformations;
 import org.neteril.Zendroidcomic.IComicSource;
 
@@ -20,13 +14,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class DilbertComicSource implements IComicSource {
-	final Pattern imageRegex = Pattern.compile("http://dilbert.com/dyn/str_strip/.+\\.strip\\.gif");
+	private static final Pattern imageRegex = Pattern.compile("http://dilbert.com/dyn/str_strip/.+\\.strip\\.gif");
 
 	@Override
 	public ComicInformations getNextComic() {
 		HttpEntity entity = null;
 		try {
-			final HttpClient client = new DefaultHttpClient();
+			final HttpClient client = ComicSourceHelper.obtainClient();
 			Matcher matcher = null;
 			do {
 				Calendar randomDate = ComicSourceHelper.getRandomDate(1995);
@@ -35,19 +29,11 @@ public class DilbertComicSource implements IComicSource {
 						randomDate.get(Calendar.MONTH),
 						randomDate.get(Calendar.DATE));
 
-				HttpResponse response = client.execute(new HttpGet(randomUrl));
-				entity = response.getEntity();
-				// Hurray for broken Dilbert encoding (was utf8-lias)
-				String content = EncodingUtils.getString(EntityUtils.toByteArray(entity), "utf-8");
-				ComicSourceHelper.consume(entity);
+				String content = ComicSourceHelper.fetchStringWithFixup(client, randomUrl);
 				matcher = imageRegex.matcher(content);
-			} while (!matcher.find ());
+			} while (!matcher.find () && !matcher.find ());
 			String lastUrl = matcher.group(0);
-			HttpResponse response = client.execute(new HttpGet (lastUrl));
-			
-			entity = response.getEntity();
-			byte[] imgData = EntityUtils.toByteArray(entity);
-			ComicSourceHelper.consume(entity);
+			byte[] imgData = ComicSourceHelper.fetchByteArray(client, lastUrl);
 			BitmapFactory.Options config = new BitmapFactory.Options();
 			Bitmap bmp = BitmapFactory.decodeByteArray(imgData, 0, imgData.length, config);
 			
@@ -55,12 +41,7 @@ public class DilbertComicSource implements IComicSource {
 		} catch (IOException e) {
 			e.printStackTrace();
 			try {
-		        if (entity != null && entity.isStreaming()) {
-		            InputStream instream = entity.getContent();
-		            if (instream != null) {
-		                instream.close();
-		            }
-		        }
+		        ComicSourceHelper.consume(entity);
 			} catch (IOException ex) {}
 			return getNextComic();
 		}

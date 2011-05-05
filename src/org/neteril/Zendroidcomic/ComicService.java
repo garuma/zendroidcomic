@@ -14,6 +14,31 @@ import org.neteril.Zendroidcomic.ComicSource.PhdComicSource;
 import org.neteril.Zendroidcomic.ComicSource.XkcdComicSource;
 
 public class ComicService {
+	public enum Available {
+		Xkcd,
+		Garfield,
+		Lolcat,
+		Dilbert,
+		PhdComic;
+		
+		public int toIntIndex () {
+			switch (this) {
+			case Xkcd:
+				return 0;
+			case Garfield:
+				return 1;
+			case Lolcat:
+				return 2;
+			case Dilbert:
+				return 3;
+			case PhdComic:
+				return 4;
+			default:
+				return -1;	
+			}
+		}
+	}
+	
 	// Fuck you Java
 	public interface ComicCallback {
 		public void run(ComicInformations comic);
@@ -38,6 +63,7 @@ public class ComicService {
 			new DilbertComicSource(),
 			new PhdComicSource()
 		};
+	private boolean[] disabledComics = new boolean[sources.length];
 	private List<IComicSource> shuffled = new ArrayList<IComicSource> ();
 	private Random rnd = new Random();
 	
@@ -53,9 +79,19 @@ public class ComicService {
 		taskExecutor.execute(new ComicRunnable(current, callback));
 	}
 	
+	public void toggleComicAvailability (Available comic) {
+		int index = comic.toIntIndex();
+		if (index == -1)
+			return;
+		disabledComics[index] = !disabledComics[index];
+	}
+	
 	void shuffleSources () {
 		shuffled.clear();
-		for (IComicSource addin : sources) {
+		for (int i = 0; i < sources.length; i++) {
+			if (disabledComics[i])
+				continue;
+			IComicSource addin = sources[i];
 			if (shuffled.size() == 0)
 				shuffled.add(addin);
 			else

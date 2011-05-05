@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="comicCache">
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+    </string-array>
+    <integer-array name="comicCacheValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+</resources>
