@@ -1,9 +1,10 @@
 package org.neteril.Zendroidcomic.ComicSource;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
+import java.io.Reader;
 import java.util.regex.Pattern;
 
+import org.apache.http.client.HttpClient;
 import org.neteril.Zendroidcomic.ComicInformations;
 import org.neteril.Zendroidcomic.IComicSource;
 
@@ -13,20 +14,22 @@ public class TrollcatComicSource implements IComicSource {
 
 	@Override
 	public ComicInformations getNextComic() {
-		String page = null;
+		String randomUrl = null;
+		HttpClient client = ComicSourceHelper.obtainClient();
+		
 		do {
 			try {
-				page = ComicSourceHelper.fetchString(ComicSourceHelper.obtainClient(), "http://trollcats.com");
+				Reader reader = ComicSourceHelper.fetchReader(client, "http://trollcats.com");
+				randomUrl = ParserHelper.findTagAttribute(reader, "a", "href", pattern);
+				reader.close();
+				if (randomUrl == null)
+					continue;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} while (page == null);
-		Matcher matcher = null;
-		do {
-			matcher = pattern.matcher(page);
-		} while (!matcher.find());
+		} while (randomUrl == null);
 		
-		return ComicSourceHelper.randomWithRegexFetcher(this, matcher.group(0), imgRegex);
+		return ComicSourceHelper.randomWithRegexFetcher(this, randomUrl, imgRegex);
 	}
 
 	@Override

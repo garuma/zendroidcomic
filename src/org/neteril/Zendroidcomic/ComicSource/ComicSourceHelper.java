@@ -2,10 +2,11 @@ package org.neteril.Zendroidcomic.ComicSource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpEntity;
@@ -30,6 +31,7 @@ import org.neteril.Zendroidcomic.IComicSource;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 public class ComicSourceHelper {
 	private final static HttpClient safeClient = initClient ();
@@ -50,31 +52,29 @@ public class ComicSourceHelper {
 	
 	public static ComicInformations randomWithRegexFetcher (IComicSource source, String randomUrl, Pattern regex) {
 		final HttpClient client = safeClient;
-		final Pattern imageRegex = regex;
 		
-		Matcher matcher = null;
-		String content = null;
 		byte[] imgData = null;
+		String lastUrl = null;
+		int tries = 10;
 		
 		do {
-			do {
-				try {
-					content = fetchString(client, randomUrl);
-				} catch (IOException e) {
-					e.printStackTrace();
+			Log.i("Fetcher", "Fetching " + randomUrl);
+			try {
+				HttpResponse response = client.execute(new HttpGet(randomUrl));
+				HttpEntity entity = response.getEntity();
+				// Fuck off to Dilbert and its broken utf8 encoding
+				Reader reader = new InputStreamReader(entity.getContent(), "utf-8");
+				lastUrl = ParserHelper.findTagAttribute(reader, "img", "src", regex);
+				consume(entity);
+				if (lastUrl == null) {
+					Thread.sleep(200);
 					continue;
 				}
-				matcher = imageRegex.matcher(content);
-			} while (content == null || matcher == null || !matcher.find ());
-		
-			String lastUrl = matcher.group(0);
-			// Help GC a bit
-			content = null;
-			matcher = null;
-			
-			try {
 				imgData = fetchByteArray(client, lastUrl);
 			} catch (IOException e) {
+				e.printStackTrace();
+				continue;
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 				continue;
 			}
@@ -83,7 +83,16 @@ public class ComicSourceHelper {
 			Bitmap bmp = BitmapFactory.decodeByteArray(imgData, 0, imgData.length, config);
 			
 			return new ComicInformations(source.getComicName(), source.getComicAuthor(), lastUrl, bmp);
-		} while (true);
+		} while (--tries >= 0);
+		
+		return null;
+	}
+		
+	public static Reader fetchReader (HttpClient client, String url) throws IOException {
+		HttpResponse response = client.execute(new HttpGet(url));
+		HttpEntity entity = response.getEntity();
+		// Fuck off to Dilbert and its broken utf8 encoding
+		return new InputStreamReader(entity.getContent(), "utf-8");
 	}
 	
 	public static String fetchString (HttpClient client, String url) throws IOException {
@@ -127,6 +136,12 @@ public class ComicSourceHelper {
 			int day = year == today.get(Calendar.YEAR) ? rand.nextInt (today.get(Calendar.DAY_OF_WEEK)) + 1 : rand.nextInt (29) + 1;
 			
 			return new GregorianCalendar(year, month, day);	
+		}
+	}
+	
+	public static int getRandomIndex (int min, int max) {
+		synchronized (rand) {
+			return rand.nextInt(max - min) + min;			
 		}
 	}
 	

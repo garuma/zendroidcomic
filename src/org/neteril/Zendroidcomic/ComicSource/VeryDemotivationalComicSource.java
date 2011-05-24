@@ -5,28 +5,24 @@ import java.util.regex.Pattern;
 import org.neteril.Zendroidcomic.ComicInformations;
 import org.neteril.Zendroidcomic.IComicSource;
 
-public class PhdComicSource implements IComicSource {
-	// Dirty hack
-	private final int maxId = 1428;
-	private static final String baseUrl = "http://www.phdcomics.com/comics/archive.php?comicid=";
-	private static final Pattern pattern = Pattern.compile ("http://www.phdcomics.com/comics/archive/phd\\d{4,}s.gif");
-
+public class VeryDemotivationalComicSource implements IComicSource {
+	private final static Pattern pattern = Pattern.compile("http://verydemotivational.files.wordpress.com/(\\d+)/(\\d+)/(\\w|-|_)+\\.\\w+");
+	
 	@Override
 	public ComicInformations getNextComic() {
-		int id = ComicSourceHelper.getRandomIndex(1, maxId);
 		return ComicSourceHelper.randomWithRegexFetcher(this,
-				baseUrl + id,
+				"http://verydemotivational.memebase.com/?random",
 				pattern);
 	}
 
 	@Override
 	public String getComicName() {
-		return "PHDComic";
+		return "Very Demotivational";
 	}
 
 	@Override
 	public String getComicAuthor() {
-		return "Jorge Cham";
+		return "Various";
 	}
 
 	@Override

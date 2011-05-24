@@ -6,7 +6,7 @@ import org.neteril.Zendroidcomic.ComicInformations;
 import org.neteril.Zendroidcomic.IComicSource;
 
 public class LolcatComicSource implements IComicSource {
-	private final static Pattern pattern = Pattern.compile("http://icanhascheezburger.files.wordpress.com/(\\d+)/(\\d+)/(\\w|-|_)+\\.\\w+");
+	private final static Pattern pattern = Pattern.compile("http://icanhascheezburger.files.wordpress.com/\\d{4,}/\\d{2,}/funny-pictures-(\\w|-|_)+\\.\\w{3}");
 	
 	@Override
 	public ComicInformations getNextComic() {
