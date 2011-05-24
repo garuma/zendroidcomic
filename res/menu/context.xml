@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/contextShare" android:title="Share"></item>
+    <item android:id="@+id/contextBrowser" android:title="Open in Browser" android:titleCondensed="Browser"></item>
+    <item android:id="@+id/contextFavorite" android:title="Add to favorite" android:titleCondensed="Favorite"></item>
+</menu>

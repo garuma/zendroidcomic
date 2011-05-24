@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:menuCategory="system" android:titleCondensed="Preferences" android:title="Preferences" android:id="@+id/options"></item>
+    <item android:menuCategory="system" android:titleCondensed="Preferences" android:title="Preferences" android:id="@+id/options" android:icon="@android:drawable/ic_menu_preferences"></item>
 </menu>

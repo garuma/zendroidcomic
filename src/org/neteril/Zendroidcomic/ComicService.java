@@ -9,10 +9,11 @@ import java.util.concurrent.Executors;
 
 import org.neteril.Zendroidcomic.ComicSource.DilbertComicSource;
 import org.neteril.Zendroidcomic.ComicSource.GarfieldComicSource;
-import org.neteril.Zendroidcomic.ComicSource.LolcatComicSource;
 import org.neteril.Zendroidcomic.ComicSource.PhdComicSource;
 import org.neteril.Zendroidcomic.ComicSource.TrollcatComicSource;
 import org.neteril.Zendroidcomic.ComicSource.XkcdComicSource;
+
+import android.content.res.Resources;
 
 public class ComicService {
 	public enum Available {
@@ -21,25 +22,41 @@ public class ComicService {
 		Lolcat,
 		Dilbert,
 		PhdComic,
-		Trollcats;
+		Trollcats,
+		VeryDemotivational;
 		
 		public int toIntIndex () {
 			switch (this) {
 			case Xkcd:
 				return 0;
 			case Garfield:
-				return 1;
-			case Lolcat:
-				return 2;
+				return 1;			
 			case Dilbert:
-				return 3;
+				return 2;
 			case PhdComic:
-				return 4;
+				return 3;
 			case Trollcats:
+				return 4;
+			case Lolcat:
 				return 5;
+			case VeryDemotivational:
+				return 6;
 			default:
 				return -1;	
 			}
+		}
+		
+		public static Available fromString (String prefName, Resources res) {
+			if (prefName.equalsIgnoreCase(res.getString(R.string.prefComicXkcd)))
+				return Available.Xkcd;
+			else if (prefName.equalsIgnoreCase(res.getString(R.string.prefComicGarfield)))
+				return Available.Garfield;
+			else if (prefName.equalsIgnoreCase(res.getString(R.string.prefComicPhdcomic)))
+				return Available.PhdComic;
+			else if (prefName.equalsIgnoreCase(res.getString(R.string.prefComicTrollcats)))
+				return Available.Trollcats;
+			
+			return null;
 		}
 	}
 	
@@ -63,7 +80,6 @@ public class ComicService {
 	private IComicSource[] sources = { 
 			new XkcdComicSource(),
 			new GarfieldComicSource(),
-			new LolcatComicSource(),
 			new DilbertComicSource(),
 			new PhdComicSource(),
 			new TrollcatComicSource()
@@ -75,6 +91,10 @@ public class ComicService {
 	private ListIterator<IComicSource> enumerator;
 	
 	ExecutorService taskExecutor = Executors.newCachedThreadPool();
+	
+	public ComicService (boolean[] initialEnabled) {
+		updateComicAvailability(initialEnabled);
+	}
 	
 	public void getNextComic (ComicCallback callback) {
 		if (enumerator == null || !enumerator.hasNext())
@@ -89,6 +109,11 @@ public class ComicService {
 		if (index == -1)
 			return;
 		disabledComics[index] = !disabledComics[index];
+	}
+	
+	public void updateComicAvailability (boolean[] newAvailability) {
+		disabledComics = newAvailability;
+		shuffleSources();
 	}
 	
 	void shuffleSources () {

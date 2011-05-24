@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<ListPreference android:summary="@string/pref_comic_cache_summary"
-		android:title="@string/pref_comic_cache" android:key="@string/comicCachePref" android:entries="@array/comicCache" android:entryValues="@array/comicCacheValues" android:defaultValue="0"></ListPreference>
+		android:title="@string/pref_comic_cache" android:key="@string/comicCachePref"
+		android:entries="@array/comicCache" android:entryValues="@array/comicCacheValues"
+		android:defaultValue="0"></ListPreference>
+	<!-- 
 	<CheckBoxPreference android:key="@string/comicShowAd"
-		android:title="@string/pref_comic_ad_header" android:summary="@string/pref_comic_ad_summary" android:defaultValue="true"></CheckBoxPreference>
+		android:title="@string/pref_comic_ad_header" android:summary="@string/pref_comic_ad_summary"
+		android:defaultValue="true"></CheckBoxPreference>
+		 -->
 	<PreferenceCategory android:title="@string/pref_comic_list_header"
 		android:summary="@string/pref_comic_list_summary">
 
@@ -15,7 +20,8 @@
 			android:key="@string/prefComicPhdcomic" android:defaultValue="true"></CheckBoxPreference>
 		<CheckBoxPreference android:title="XKCD"
 			android:key="@string/prefComicXkcd" android:defaultValue="true"></CheckBoxPreference>
-		<CheckBoxPreference android:title="Lolcats"
-			android:key="@string/prefComicLolcats" android:defaultValue="true"></CheckBoxPreference>
+		<CheckBoxPreference android:title="Trollcats"
+			android:key="@string/prefComicTrollcats" android:defaultValue="true"></CheckBoxPreference>
 	</PreferenceCategory>
+	
 </PreferenceScreen>

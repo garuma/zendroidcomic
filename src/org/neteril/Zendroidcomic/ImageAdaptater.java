@@ -70,14 +70,15 @@ public class ImageAdaptater extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ImageView view = convertView != null ? (ImageView) convertView : new ImageView (context);
+		ImageView view = convertView != null ? (ImageView) convertView : createImageView();
 		
 		if (count == 0) {
 			view.setImageBitmap(cache.getDefaultBitmap());
 		} else if (cache.canReturnBitmap(position)) {
 			Bitmap bmp = cache.unsafeGetBitmap (position);
-			if (bmp != null)
+			if (bmp != null) {
 				view.setImageBitmap(bmp);
+			}
 		} else {
 			// There is already pending request to show something, cancel
 			if (currentImageView != null)
@@ -93,6 +94,11 @@ public class ImageAdaptater extends BaseAdapter {
         view.setScaleType(ImageView.ScaleType.FIT_CENTER);
         view.setBackgroundColor(Color.BLACK);
 		
+		return view;
+	}
+	
+	private ImageView createImageView () {
+		ImageView view = new ImageView (context);		
 		return view;
 	}
 	

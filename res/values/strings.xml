@@ -8,9 +8,9 @@
     <string name="comicCachePref">pref_comic_cache_widget</string>
     <string name="prefComicDilbert">prefComicDilbert</string>
     <string name="prefComicXkcd">prefComicXkcd</string>
+    <string name="prefComicTrollcats">prefComicTrollcats</string>
     <string name="prefComicGarfield">prefComicGarfield</string>
     <string name="prefComicPhdcomic">prefComicPhdcomic</string>
-    <string name="prefComicLolcats">prefComicLolcats</string>
     <string name="comicShowAd">comicShowAd</string>
     <string name="pref_comic_ad_header">Show Ad</string>
     <string name="pref_comic_ad_summary">If you don\'t want me to be millionaire, no worries</string>
