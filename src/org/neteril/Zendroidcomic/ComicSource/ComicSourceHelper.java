@@ -40,13 +40,13 @@ public class ComicSourceHelper {
         HttpParams params = new BasicHttpParams();
         ConnManagerParams.setMaxTotalConnections(params, 100);
         HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-         
+
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(
                 new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        
+
         ClientConnectionManager cm = new ThreadSafeClientConnManager(params, schemeRegistry);
-        
+
         return new DefaultHttpClient(cm, params);
 	}
 	

@@ -40,20 +40,20 @@ public class Zendroidcomic extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         checkInternetConnectivity();
-        
+
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);;
         setContentView(R.layout.main);
         setProgressBarIndeterminate(true);
         setProgressBarIndeterminateVisibility(false);
-        
+
         boolean[] comicsEnabled = fetchComicPreferences ();
         while (comicsEnabled == null) {
         	askForNewPreferences();
         	comicsEnabled = fetchComicPreferences();
         }
-        
+
         Log.w("initial settings", Arrays.toString(comicsEnabled));
         service = new ComicService(comicsEnabled);
         cache = new ImageCache(service, BitmapFactory.decodeResource(getResources(), R.drawable.empty));
@@ -76,14 +76,14 @@ public class Zendroidcomic extends Activity {
 		});
         registerForContextMenu(gallery);
     }
-    
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
     	//super.onCreateContextMenu(menu, v, menuInfo);
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.context, menu);
     }
-    
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
     	AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -109,7 +109,7 @@ public class Zendroidcomic extends Activity {
     	
     	return true;
     }
-    
+
     private boolean[] fetchComicPreferences () {
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	
@@ -127,7 +127,7 @@ public class Zendroidcomic extends Activity {
     			return newAvailability;
     	return null;
     }
-    
+
     private void askForNewPreferences () {
     	AlertDialog.Builder builder = new AlertDialog.Builder (this);
     	builder.setTitle("Insufficient comic sources");
@@ -143,26 +143,26 @@ public class Zendroidcomic extends Activity {
 		});
     	builder.create().show();
     }
-    
+
     private void showComicInfos (ComicInformations is) {
 		if (is == null)
 			return;
 		currentToast = Toast.makeText(this, String.format("%s from %s", is.getName(), is.getAuthor()), Toast.LENGTH_SHORT);
 		currentToast.show ();
 	}
-    
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
     	super.onConfigurationChanged(newConfig);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.options, menu);
     	return super.onCreateOptionsMenu(menu);
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	// Only one button, launch setting activity
@@ -170,7 +170,7 @@ public class Zendroidcomic extends Activity {
     	startActivityForResult(intent, PREF_RETURN_CODE);
     	return true;
     }
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (requestCode == PREF_RETURN_CODE) {
@@ -185,7 +185,7 @@ public class Zendroidcomic extends Activity {
     	
     	super.onActivityResult(requestCode, resultCode, data);
     }
-    
+
     private void checkInternetConnectivity () {
     	ConnectivityManager manager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
     	// TODO: also monitor network changes

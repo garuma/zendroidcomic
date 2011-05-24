@@ -77,7 +77,7 @@ public class ComicService {
 		}
 	}
 	
-	private IComicSource[] sources = { 
+	private IComicSource[] sources = {
 			new XkcdComicSource(),
 			new GarfieldComicSource(),
 			new DilbertComicSource(),
