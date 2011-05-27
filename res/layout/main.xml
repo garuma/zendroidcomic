@@ -4,5 +4,5 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-    <Gallery android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/mainGallery" android:spacing="10px" android:animationDuration="2"></Gallery>
+    <Gallery android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/mainGallery" android:spacing="10px" android:animationDuration="1"></Gallery>
 </LinearLayout>
