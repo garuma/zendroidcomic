@@ -10,10 +10,12 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -24,6 +26,9 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EncodingUtils;
 import org.apache.http.util.EntityUtils;
 import org.neteril.Zendroidcomic.ComicInformations;
@@ -54,14 +59,19 @@ public class ComicSourceHelper {
 		final HttpClient client = safeClient;
 		
 		byte[] imgData = null;
-		String lastUrl = null;
+		String lastUrl = null, currentUrl = null;
 		int tries = 10;
 		
 		do {
 			Log.i("Fetcher", "Fetching " + randomUrl);
 			try {
-				HttpResponse response = client.execute(new HttpGet(randomUrl));
+				HttpContext ctx = new BasicHttpContext();
+				HttpResponse response = client.execute(new HttpGet(randomUrl), ctx);
 				HttpEntity entity = response.getEntity();
+				HttpUriRequest currentReq = (HttpUriRequest)ctx.getAttribute(ExecutionContext.HTTP_REQUEST);
+		        HttpHost currentHost = (HttpHost)ctx.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+		        // The real URL we got redirected to
+		        currentUrl = currentHost.toURI() + currentReq.getURI();
 				// Fuck off to Dilbert and its broken utf8 encoding
 				Reader reader = new InputStreamReader(entity.getContent(), "utf-8");
 				lastUrl = ParserHelper.findTagAttribute(reader, "img", "src", regex);
@@ -82,7 +92,7 @@ public class ComicSourceHelper {
 			BitmapFactory.Options config = new BitmapFactory.Options();
 			Bitmap bmp = BitmapFactory.decodeByteArray(imgData, 0, imgData.length, config);
 			
-			return new ComicInformations(source.getComicName(), source.getComicAuthor(), lastUrl, bmp);
+			return new ComicInformations(source.getComicName(), source.getComicAuthor(), currentUrl, bmp);
 		} while (--tries >= 0);
 		
 		return null;
