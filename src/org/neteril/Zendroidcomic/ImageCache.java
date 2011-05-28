@@ -29,8 +29,10 @@ public class ImageCache {
 				ComicCallback callback = new ComicService.ComicCallback() {
 					@Override
 					public void run(ComicInformations bitmap) {
-						synchronized (bitmapCache) {
-							bitmapCache.add(bitmap);
+						if (bitmap != null) {
+							synchronized (bitmapCache) {
+								bitmapCache.add(bitmap);
+							}
 						}
 						if (count.decrementAndGet() == 0) {
 							Message msg = handler.obtainMessage(ImageAdaptater.MESSAGE_NEXT_COMPLETE);

@@ -79,9 +79,11 @@ public class Zendroidcomic extends Activity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-    	//super.onCreateContextMenu(menu, v, menuInfo);
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.context, menu);
+    	ComicInformations comicInfos = cache.getInformations(((AdapterContextMenuInfo)menuInfo).position);
+    	if (comicInfos != null)
+    		menu.setHeaderTitle(comicInfos.getName());
     }
 
     @Override
@@ -95,10 +97,14 @@ public class Zendroidcomic extends Activity {
     	case R.id.contextBrowser:
     		intent = new Intent (Intent.ACTION_VIEW, Uri.parse(comicInformations.getUrl()));
     		break;
-    	case R.id.contextFavorite:
-    		break;
+    	/*case R.id.contextFavorite:
+    		break;*/
     	case R.id.contextShare:
-    		intent = new Intent (Intent.ACTION_SEND, Uri.parse(comicInformations.getUrl()));
+    		intent = new Intent (Intent.ACTION_SEND);
+    		intent.putExtra(Intent.EXTRA_SUBJECT, String.format("Sharing this %s strip", comicInformations.getName()));
+    		intent.putExtra(Intent.EXTRA_TEXT, comicInformations.getUrl());
+    		intent.setType("text/plain");
+    		
     		break;
     	}
     	
