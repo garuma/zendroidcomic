@@ -35,6 +35,7 @@ public class Zendroidcomic extends Activity {
 	private ImageAdaptater adapter;
 	private Gallery gallery;
 	private Toast currentToast;
+	private boolean toastEnabled = true;
 	
     /** Called when the activity is first created. */
     @Override
@@ -119,6 +120,8 @@ public class Zendroidcomic extends Activity {
     private boolean[] fetchComicPreferences () {
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	
+    	toastEnabled = prefs.getBoolean(getString(R.string.comicShowToast), true);
+    	
     	boolean[] newAvailability = {
     		!prefs.getBoolean(getString(R.string.prefComicXkcd), true),
     		!prefs.getBoolean(getString(R.string.prefComicGarfield), true),
@@ -151,7 +154,7 @@ public class Zendroidcomic extends Activity {
     }
 
     private void showComicInfos (ComicInformations is) {
-		if (is == null)
+		if (!toastEnabled || is == null)
 			return;
 		currentToast = Toast.makeText(this, String.format("%s from %s", is.getName(), is.getAuthor()), Toast.LENGTH_SHORT);
 		currentToast.show ();
@@ -197,6 +200,7 @@ public class Zendroidcomic extends Activity {
     	// TODO: also monitor network changes
     	if (manager.getActiveNetworkInfo().isConnected())
     		return;
+    	
     	
     	AlertDialog.Builder builder = new AlertDialog.Builder (this);
     	builder.setTitle("No Internet access");

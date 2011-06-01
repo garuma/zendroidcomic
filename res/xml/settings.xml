@@ -4,6 +4,10 @@
 		android:title="@string/pref_comic_cache" android:key="@string/comicCachePref"
 		android:entries="@array/comicCache" android:entryValues="@array/comicCacheValues"
 		android:defaultValue="0"></ListPreference>
+	<CheckBoxPreference android:key="@string/comicShowToast"
+		android:title="@string/pref_comic_toast_header" android:summary="@string/pref_comic_toast_summary"
+		android:defaultValue="true"></CheckBoxPreference>
+		
 	<!-- 
 	<CheckBoxPreference android:key="@string/comicShowAd"
 		android:title="@string/pref_comic_ad_header" android:summary="@string/pref_comic_ad_summary"

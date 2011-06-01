@@ -12,6 +12,9 @@
     <string name="prefComicGarfield">prefComicGarfield</string>
     <string name="prefComicPhdcomic">prefComicPhdcomic</string>
     <string name="comicShowAd">comicShowAd</string>
+    <string name="comicShowToast">comicShowToast</string>
     <string name="pref_comic_ad_header">Show Ad</string>
     <string name="pref_comic_ad_summary">If you don\'t want me to be millionaire, no worries</string>
+    <string name="pref_comic_toast_header">Show toast messages</string>
+    <string name="pref_comic_toast_summary">Control if a toast message with comic informations is shown when you change focus</string>
 </resources>
