@@ -10,14 +10,9 @@ public class XkcdComicSource implements IComicSource {
 
 	@Override
 	public ComicInformations getNextComic() {
-		ComicInformations infos = null;
-		do {
-			infos = ComicSourceHelper.randomWithRegexFetcher(this,
-				"http://xkcd.com/" + ComicSourceHelper.getRandomIndex(46, 895),
-				pattern);
-		} while (infos == null);
-		
-		return infos;
+		return ComicSourceHelper.randomWithRegexFetcher(this,
+			"http://xkcd.com/" + ComicSourceHelper.getRandomIndex(46, 895),
+			pattern);
 	}
 
 	@Override

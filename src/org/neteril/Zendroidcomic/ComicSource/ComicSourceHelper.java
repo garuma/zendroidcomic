@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.SocketException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
@@ -24,6 +25,7 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.BasicHttpContext;
@@ -45,6 +47,8 @@ public class ComicSourceHelper {
         HttpParams params = new BasicHttpParams();
         ConnManagerParams.setMaxTotalConnections(params, 100);
         HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+        HttpConnectionParams.setConnectionTimeout(params, 300);
+        HttpConnectionParams.setSoTimeout(params, 300);
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(
@@ -60,7 +64,7 @@ public class ComicSourceHelper {
 		
 		byte[] imgData = null;
 		String lastUrl = null, currentUrl = null;
-		int tries = 10;
+		int tries = 3;
 		
 		do {
 			Log.i("Fetcher", "Fetching " + randomUrl);
@@ -81,6 +85,10 @@ public class ComicSourceHelper {
 					continue;
 				}
 				imgData = fetchByteArray(client, lastUrl);
+			} catch (SocketException e) {
+				// Socket exceptions are mostly triggered by timeout, go out early in that case
+				e.printStackTrace();
+				return null;
 			} catch (IOException e) {
 				e.printStackTrace();
 				continue;
