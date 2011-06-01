@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -42,7 +41,8 @@ public class Zendroidcomic extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        checkInternetConnectivity();
+        if (!checkInternetConnectivity())
+        	return;
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);;
         setContentView(R.layout.main);
@@ -195,24 +195,11 @@ public class Zendroidcomic extends Activity {
     	super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void checkInternetConnectivity () {
-    	ConnectivityManager manager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
-    	// TODO: also monitor network changes
-    	if (manager.getActiveNetworkInfo().isConnected())
-    		return;
-    	
-    	
-    	AlertDialog.Builder builder = new AlertDialog.Builder (this);
-    	builder.setTitle("No Internet access");
-    	builder.setMessage("You have to enable Internet access somehow before you can use this application");
-    	builder.setCancelable(false);
-    	builder.setPositiveButton("Close for now", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-				finish();
-			}
-		});
-    	builder.create().show();
+    private boolean checkInternetConnectivity () {
+    	NetworkManager.initialize(this);
+    	boolean result = NetworkManager.getConnectedStatus(); 
+    	if (!result)
+    		NetworkManager.showNoConnectivityDialog(this);
+    	return result;
     }
 }

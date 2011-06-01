@@ -85,9 +85,12 @@ public class ImageAdaptater extends BaseAdapter {
 				return currentImageView;
 			
 			view.setImageBitmap(cache.getDefaultBitmap());
-			currentImageView = view;
-			cache.getImage(position, handler);
-			context.setProgressBarIndeterminateVisibility(true);
+			
+			if (NetworkManager.getConnectedStatus()) {
+				currentImageView = view;
+				cache.getImage(position, handler);
+				context.setProgressBarIndeterminateVisibility(true);
+			}
 		}
 		
         view.setLayoutParams(new Gallery.LayoutParams(Gallery.LayoutParams.MATCH_PARENT, Gallery.LayoutParams.MATCH_PARENT));
