@@ -2,14 +2,12 @@ package org.neteril.Zendroidcomic;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class NetworkManager extends BroadcastReceiver {
+public class NetworkManager {
 	static ConnectivityManager manager;
 	static Context context;
 	
@@ -23,16 +21,11 @@ public class NetworkManager extends BroadcastReceiver {
 		return infos != null && infos.isConnected();
 	}
 
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		if (!intent.getAction().equalsIgnoreCase(ConnectivityManager.CONNECTIVITY_ACTION))
+	public static void showNoConnectivityDialog(final Activity target) {
+		// If there's no context, it means we haven't started the application yet
+		if (context == null)
 			return;
 		
-		if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false))
-			showNoConnectivityDialog(null);
-	}
-	
-	public static void showNoConnectivityDialog(final Activity target) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
     	builder.setTitle("No Internet access");
     	builder.setMessage("You have to enable Internet access somehow to use this application");

@@ -90,6 +90,8 @@ public class ImageAdaptater extends BaseAdapter {
 				currentImageView = view;
 				cache.getImage(position, handler);
 				context.setProgressBarIndeterminateVisibility(true);
+			} else {
+				NetworkManager.showNoConnectivityDialog(null);
 			}
 		}
 		

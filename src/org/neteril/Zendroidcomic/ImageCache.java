@@ -72,9 +72,12 @@ public class ImageCache {
 	}
 	
 	public Bitmap unsafeGetBitmap (int position) {
-		if (position >= bitmapCache.size())
-			return emptyBitmap;
-		return bitmapCache.get(position).getComic();
+		synchronized (bitmapCache) {
+			if (position >= bitmapCache.size())
+				return emptyBitmap;
+			ComicInformations infos = bitmapCache.get(position);
+			return infos == null ? emptyBitmap : infos.getComic();	
+		}
 	}
 	
 	public boolean canReturnBitmap (int position) {
@@ -82,9 +85,11 @@ public class ImageCache {
 	}
 	
 	public ComicInformations getInformations (int position) {
-		if (position < 0 || position >= bitmapCache.size())
-			return null;
-		return bitmapCache.get(position);
+		synchronized (bitmapCache) {
+			if (position < 0 || position >= bitmapCache.size())
+				return null;
+			return bitmapCache.get(position);	
+		}
 	}
 	
 	public int getCacheCount () {

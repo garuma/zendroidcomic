@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.neteril.Zendroidcomic" android:versionCode="2"
-	android:versionName="1.0.1">
+	package="org.neteril.Zendroidcomic" android:versionCode="3"
+	android:versionName="1.0.2">
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 	<uses-sdk android:minSdkVersion="8"></uses-sdk>
@@ -18,10 +18,5 @@
 				<category android:name="android.intent.category.CATEGORY_PREFERENCE" />
 			</intent-filter>
 		</activity>
-		<receiver android:name=".NetworkManager">
-			<intent-filter>
-				<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-			</intent-filter>
-		</receiver>
 	</application>
 </manifest>

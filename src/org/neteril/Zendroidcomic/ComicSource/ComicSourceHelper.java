@@ -47,8 +47,8 @@ public class ComicSourceHelper {
         HttpParams params = new BasicHttpParams();
         ConnManagerParams.setMaxTotalConnections(params, 100);
         HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-        HttpConnectionParams.setConnectionTimeout(params, 300);
-        HttpConnectionParams.setSoTimeout(params, 300);
+        HttpConnectionParams.setConnectionTimeout(params, 2000);
+        HttpConnectionParams.setSoTimeout(params, 2000);
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(

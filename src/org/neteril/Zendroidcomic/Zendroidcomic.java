@@ -43,7 +43,6 @@ public class Zendroidcomic extends Activity {
 
         if (!checkInternetConnectivity())
         	return;
-
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);;
         setContentView(R.layout.main);
         setProgressBarIndeterminate(true);
