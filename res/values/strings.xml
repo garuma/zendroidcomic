@@ -11,6 +11,7 @@
     <string name="prefComicTrollcats">prefComicTrollcats</string>
     <string name="prefComicGarfield">prefComicGarfield</string>
     <string name="prefComicPhdcomic">prefComicPhdcomic</string>
+    <string name="prefComicExplosm">prefComicExplosm</string>
     <string name="comicShowAd">comicShowAd</string>
     <string name="comicShowToast">comicShowToast</string>
     <string name="pref_comic_ad_header">Show Ad</string>

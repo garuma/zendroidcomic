@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.neteril.Zendroidcomic.ComicSource.DilbertComicSource;
+import org.neteril.Zendroidcomic.ComicSource.ExplosmComicSource;
 import org.neteril.Zendroidcomic.ComicSource.GarfieldComicSource;
 import org.neteril.Zendroidcomic.ComicSource.PhdComicSource;
 import org.neteril.Zendroidcomic.ComicSource.TrollcatComicSource;
@@ -23,6 +24,7 @@ public class ComicService {
 		Dilbert,
 		PhdComic,
 		Trollcats,
+		Explosm,
 		VeryDemotivational;
 		
 		public int toIntIndex () {
@@ -37,10 +39,12 @@ public class ComicService {
 				return 3;
 			case Trollcats:
 				return 4;
-			case Lolcat:
+			case Explosm:
 				return 5;
-			case VeryDemotivational:
+			case Lolcat:
 				return 6;
+			case VeryDemotivational:
+				return 7;
 			default:
 				return -1;	
 			}
@@ -55,6 +59,8 @@ public class ComicService {
 				return Available.PhdComic;
 			else if (prefName.equalsIgnoreCase(res.getString(R.string.prefComicTrollcats)))
 				return Available.Trollcats;
+			else if (prefName.equalsIgnoreCase(res.getString(R.string.prefComicExplosm)))
+				return Available.Explosm;
 			
 			return null;
 		}
@@ -82,7 +88,8 @@ public class ComicService {
 			new GarfieldComicSource(),
 			new DilbertComicSource(),
 			new PhdComicSource(),
-			new TrollcatComicSource()
+			new TrollcatComicSource(),
+			new ExplosmComicSource()
 		};
 	private boolean[] disabledComics = new boolean[sources.length];
 	private List<IComicSource> shuffled = new ArrayList<IComicSource> ();

@@ -23,6 +23,8 @@
 			android:key="@string/prefComicXkcd" android:defaultValue="true"></CheckBoxPreference>
 		<CheckBoxPreference android:title="Trollcats"
 			android:key="@string/prefComicTrollcats" android:defaultValue="true"></CheckBoxPreference>
+		<CheckBoxPreference android:title="Cyanide &amp; Happiness"
+			android:key="@string/prefComicExplosm" android:defaultValue="true"></CheckBoxPreference>
 	</PreferenceCategory>
 
 </PreferenceScreen>

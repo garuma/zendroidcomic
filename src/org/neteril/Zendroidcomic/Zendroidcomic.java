@@ -126,7 +126,8 @@ public class Zendroidcomic extends Activity {
     		!prefs.getBoolean(getString(R.string.prefComicGarfield), true),
     		!prefs.getBoolean(getString(R.string.prefComicDilbert), true),
     		!prefs.getBoolean(getString(R.string.prefComicPhdcomic), true),
-    		!prefs.getBoolean(getString(R.string.prefComicTrollcats), true)
+    		!prefs.getBoolean(getString(R.string.prefComicTrollcats), true),
+    		!prefs.getBoolean(getString(R.string.prefComicExplosm), true)
     	};
     	
     	// Check that at least one of them is false
