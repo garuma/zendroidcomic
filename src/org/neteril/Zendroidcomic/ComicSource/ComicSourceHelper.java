@@ -17,6 +17,7 @@ import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -46,6 +47,7 @@ public class ComicSourceHelper {
 	private static HttpClient initClient () {
         HttpParams params = new BasicHttpParams();
         ConnManagerParams.setMaxTotalConnections(params, 100);
+        ConnManagerParams.setTimeout(params, 2000);
         HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
         HttpConnectionParams.setConnectionTimeout(params, 2000);
         HttpConnectionParams.setSoTimeout(params, 2000);
@@ -87,12 +89,19 @@ public class ComicSourceHelper {
 				imgData = fetchByteArray(client, lastUrl);
 			} catch (SocketException e) {
 				// Socket exceptions are mostly triggered by timeout, go out early in that case
+				Log.w("Comic src helper", "Socket exception");
 				e.printStackTrace();
 				return null;
 			} catch (IOException e) {
+				Log.w("Comic src helper", "IO exception");
 				e.printStackTrace();
 				continue;
 			} catch (InterruptedException e) {
+				Log.w("Comic src helper", "Interrupted exception");
+				e.printStackTrace();
+				continue;
+			} catch (Exception e) {
+				Log.w("Comic src helper", "Generic exception");
 				e.printStackTrace();
 				continue;
 			}
